@@ -1,0 +1,20 @@
+<nz-list [nzLoading]="loading">
+    <nz-list-item *ngFor="let note of notes">
+        <nz-list-item-meta nzDescription="Sebastian Szvetecz • 30.10.2022 15:00" nzTitle="Title"></nz-list-item-meta>
+        <ul nz-list-item-actions>
+            <nz-list-item-action>
+                <nz-button-group>
+                    <button nz-button [routerLink]="['/notes', note.id]">
+                        <span nz-icon nzType="edit"></span>
+                        Edit
+                    </button>
+                    <button nz-button nzDanger
+                        nz-popconfirm nzPopconfirmTitle="Are you sure?" nzPopconfirmPlacement="left" nzOkText="Delete" [nzOkDanger]="true" (nzOnConfirm)="deleteNote(note)">
+                        <span nz-icon nzType="delete"></span>
+                        Delete
+                    </button>
+                </nz-button-group>
+            </nz-list-item-action>
+        </ul>
+    </nz-list-item>
+</nz-list>
