@@ -30,7 +30,7 @@ jobs:
           app_location: "/src/frontend/collaborative-note-editor" # App source code path
           app_build_command: "npm run build"
           skip_api_build: true
-          output_location: "dist" # Built app content directory - optional
+          output_location: "dist/collaborative-note-editor" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
