@@ -23,7 +23,7 @@ internal class NotesService
         return _dbContext.Notes.FindAsync(id);
     }
 
-    public async ValueTask<Note> GetOrThrow(Guid id)
+    public async ValueTask<Note> GetOrThrowAsync(Guid id)
     {
         return await _dbContext.Notes.FindAsync(id) ?? throw new NotFoundException();
     }
