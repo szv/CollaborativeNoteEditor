@@ -14,7 +14,7 @@ builder.Services.AddDbContext<NotesDbContext>(options =>
 {
     string connectionString = builder.Configuration["NotesService:Cosmos:ConnectionString"] ?? throw new ConfigurationException("ConfigurationKey not found", "NotesService:Cosmos:ConnectionString");
     string databaseName = builder.Configuration["NotesService:Cosmos:DatabaseName"] ?? throw new ConfigurationException("ConfigurationKey not found", "NotesService:Cosmos:DatabaseName");
-    options.UseCosmos("connectionString", "databaseName");
+    options.UseCosmos(connectionString, databaseName);
 });
 
 builder.Services.AddScoped<NotesService.Services.NotesService>();
