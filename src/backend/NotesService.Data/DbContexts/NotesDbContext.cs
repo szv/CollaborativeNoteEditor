@@ -6,6 +6,10 @@ namespace NotesService.Data.DbContexts;
 
 public class NotesDbContext : DbContext
 {
+    public NotesDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
     public DbSet<Note> Notes => Set<Note>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
