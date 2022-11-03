@@ -1,6 +1,8 @@
 <nz-list [nzLoading]="loading">
-    <nz-list-item *ngFor="let note of notes">
-        <nz-list-item-meta nzDescription="Sebastian Szvetecz • 30.10.2022 15:00" nzTitle="Title"></nz-list-item-meta>
+    <nz-list-item *ngFor="let note of notes$ | async">
+        <nz-list-item-meta
+            nzDescription="Sebastian Szvetecz • {{ note.createdAt | date:'short' }}"
+            [nzTitle]="note.id"></nz-list-item-meta>
         <ul nz-list-item-actions>
             <nz-list-item-action>
                 <nz-button-group>
