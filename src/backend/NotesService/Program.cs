@@ -25,6 +25,29 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Endpoints
-// ...
+app.MapGet("/notes", () =>
+{
+
+});
+
+app.MapGet("/notes/{id}", (Guid id) =>
+{
+
+});
+
+app.MapPost("/notes", () =>
+{
+
+});
+
+app.MapPut("/notes/{id}", (Guid id) =>
+{
+
+});
+
+app.MapDelete("/notes/{id}", (Guid id) =>
+{
+
+});
 
 app.Run();
