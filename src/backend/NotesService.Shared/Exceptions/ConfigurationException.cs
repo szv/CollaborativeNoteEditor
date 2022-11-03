@@ -6,11 +6,6 @@ public class ConfigurationException : Exception
     {
     }
 
-    public ConfigurationException(string message, string configurationKey) : base(message)
-    {
-        ConfigurationKey = configurationKey;
-    }
-
     public ConfigurationException(string message) : base(message)
     {
     }
@@ -18,11 +13,14 @@ public class ConfigurationException : Exception
     public ConfigurationException(string message, Exception? innerException) : base(message, innerException)
     {
     }
+}
 
-    public ConfigurationException(string message, string configurationKey, Exception? innerException) : base(message, innerException)
+public class ConfigurationKeyNotFoundException : ConfigurationException
+{
+    public ConfigurationKeyNotFoundException(string configurationKey) : base($"ConfigurationKey \"{configurationKey}\" not found")
     {
         ConfigurationKey = configurationKey;
     }
 
-    public string? ConfigurationKey { get; set; }
+    public string ConfigurationKey { get; set; }
 }
