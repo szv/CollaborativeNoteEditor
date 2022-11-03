@@ -30,6 +30,8 @@ internal class NotesService
 
     public Task CreateAsync(Note note)
     {
+        note.CreatedAt = DateTime.UtcNow;
+        note.UpdatedAt = DateTime.UtcNow;
         _dbContext.Notes.Add(note);
         return _dbContext.SaveChangesAsync();
     }
@@ -41,6 +43,7 @@ internal class NotesService
         if (existing is not null)
         {
             note.Id = id;
+            note.UpdatedAt = DateTime.Now;
             _dbContext.Notes.Update(note);
         }
         else
