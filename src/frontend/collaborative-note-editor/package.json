@@ -18,6 +18,7 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
+    "@openapitools/openapi-generator-cli": "^2.5.2",
     "ng-zorro-antd": "^14.1.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
