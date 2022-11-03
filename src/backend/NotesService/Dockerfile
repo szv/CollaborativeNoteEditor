@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["NotesService/NotesService.csproj", "NotesService/"]
+COPY ["NotesService.Data/NotesService.Data.csproj", "NotesService.Data/"]
+COPY ["NotesService.Shared/NotesService.Shared.csproj", "NotesService.Shared/"]
 RUN dotnet restore "NotesService/NotesService.csproj"
 COPY . .
 WORKDIR "/src/NotesService"
