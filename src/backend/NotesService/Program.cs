@@ -1,6 +1,8 @@
 using Mapster;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NotesService.Data.DbContexts;
+using NotesService.Middleware;
 using NotesService.Shared.Exceptions;
 using NotesService.Shared.Models;
 using NotesService.Shared.Transfer;
@@ -28,6 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Endpoints
 app.MapGet("/notes", (NotesService.Services.NotesService notesService) =>
@@ -35,7 +38,7 @@ app.MapGet("/notes", (NotesService.Services.NotesService notesService) =>
     return notesService.GetAsync<NoteOverviewResponseDto>();
 });
 
-app.MapGet("/notes/{id}", async (Guid id, NotesService.Services.NotesService notesService) =>
+app.MapGet("/notes/{id}", (Guid id, NotesService.Services.NotesService notesService) =>
 {
     return notesService.GetOrThrowAsync<NoteResponseDto>(id);
 });
