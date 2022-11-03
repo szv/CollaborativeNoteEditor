@@ -1,5 +1,10 @@
 Note
 
-<app-editor>
-
-</app-editor>
+<ng-container *ngIf="(note$ | async) as note">
+    Id: {{ note.id }} <br />
+    CreatedAt: {{ note.createdAt }} <br />
+    UpdatedAt: {{ note.updatedAt }} <br />
+    Content: {{ note.content}}
+</ng-container>
+<!-- <app-editor>
+</app-editor> -->

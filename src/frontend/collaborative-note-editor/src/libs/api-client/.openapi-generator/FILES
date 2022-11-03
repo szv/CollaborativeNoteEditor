@@ -1,0 +1,16 @@
+.gitignore
+README.md
+api.module.ts
+api/api.ts
+api/notesService.service.ts
+configuration.ts
+encoder.ts
+git_push.sh
+index.ts
+model/createNoteRequestDto.ts
+model/models.ts
+model/noteOverviewResponseDto.ts
+model/noteResponseDto.ts
+model/updateNoteRequestDto.ts
+param.ts
+variables.ts
