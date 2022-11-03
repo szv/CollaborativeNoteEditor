@@ -1,6 +1,8 @@
-﻿using NotesService.Data.DbContexts;
+﻿using Mapster;
+using NotesService.Data.DbContexts;
 using NotesService.Shared.Exceptions;
 using NotesService.Shared.Models;
+using System.Collections.Generic;
 
 namespace NotesService.Services;
 
@@ -18,14 +20,39 @@ internal class NotesService
         return _dbContext.Notes.AsAsyncEnumerable();
     }
 
+    public IAsyncEnumerable<TAdaptTo> GetAsync<TAdaptTo>()
+    {
+        return (IAsyncEnumerable<TAdaptTo>)_dbContext.Notes.ProjectToType<TAdaptTo>();
+    }
+
     public ValueTask<Note?> GetAsync(Guid id)
     {
         return _dbContext.Notes.FindAsync(id);
     }
 
+    public async Task<TAdaptTo?> GetAsync<TAdaptTo>(Guid id)
+        where TAdaptTo : class
+    {
+        Note? note = await _dbContext.Notes.FindAsync(id);
+
+        return note is null
+            ? null
+            : note.Adapt<TAdaptTo>();
+    }
+
     public async ValueTask<Note> GetOrThrowAsync(Guid id)
     {
         return await _dbContext.Notes.FindAsync(id) ?? throw new NotFoundException();
+    }
+
+    public async ValueTask<TAdaptTo> GetOrThrowAsync<TAdaptTo>(Guid id)
+    {
+        Note? note = await _dbContext.Notes.FindAsync(id);
+
+        if (note is null)
+            throw new NotFoundException();
+
+        return note.Adapt<TAdaptTo>();
     }
 
     public Task CreateAsync(Note note)

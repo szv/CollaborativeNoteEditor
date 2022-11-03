@@ -32,13 +32,12 @@ app.UseHttpsRedirection();
 // Endpoints
 app.MapGet("/notes", (NotesService.Services.NotesService notesService) =>
 {
-    return notesService.GetAsync().Adapt<IAsyncEnumerable<NoteResponseDto>>();
+    return notesService.GetAsync<NoteOverviewResponseDto>();
 });
 
 app.MapGet("/notes/{id}", async (Guid id, NotesService.Services.NotesService notesService) =>
 {
-    Note note = await notesService.GetOrThrowAsync(id);
-    return note.Adapt<NoteResponseDto>();
+    return notesService.GetOrThrowAsync<NoteResponseDto>(id);
 });
 
 app.MapPost("/notes", (NotesService.Services.NotesService notesService, CreateNoteRequestDto dto) =>
