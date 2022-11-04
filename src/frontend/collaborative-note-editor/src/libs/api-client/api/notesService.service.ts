@@ -30,6 +30,7 @@ import { UpdateNoteRequestDto } from '../model/updateNoteRequestDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -38,7 +39,7 @@ import { Configuration }                                     from '../configurat
 })
 export class NotesServiceService {
 
-    protected basePath = 'http://localhost:5143';
+    protected basePath = environment.basePath;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;
