@@ -1,7 +1,9 @@
 using Azure.Identity;
 using Mapster;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using NotesService;
 using NotesService.Data.DbContexts;
 using NotesService.Middleware;
 using NotesService.Shared.Exceptions;
@@ -21,6 +23,10 @@ builder.Configuration.AddAzureAppConfiguration(options =>
         .Select(KeyFilter.Any, builder.Environment.EnvironmentName)
         .ConfigureKeyVault(vault => vault.SetCredential(azureCredential));
 });
+
+// ApplicationInsights
+builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddSingleton<ITelemetryInitializer, ApplicationInsightsTelemetryInitializer>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
