@@ -22,22 +22,22 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Log in to container registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: collaborativenoteeditor.azurecr.io
           username: ${{ secrets.NOTESSERVICE_REGISTRY_USERNAME }}
           password: ${{ secrets.NOTESSERVICE_REGISTRY_PASSWORD }}
 
       - name: Build and push container image to registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           tags: collaborativenoteeditor.azurecr.io/notes-service:${{ github.sha }}
           file: src/backend/NotesService/Dockerfile
-          context: src/backend/NotesService/
+          context: src/backend/
 
 
   deploy:
