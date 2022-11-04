@@ -34,6 +34,11 @@ builder.Services.AddDbContext<NotesDbContext>(options =>
     options.UseCosmos(connectionString, databaseName);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
 // Application Services
 builder.Services.AddScoped<NotesService.Services.NotesService>();
 
@@ -46,6 +51,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 app.UseMiddleware<ExceptionMiddleware>();
 
 // Endpoints
