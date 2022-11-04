@@ -25,7 +25,8 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 });
 
 // ApplicationInsights
-builder.Services.AddApplicationInsightsTelemetry();
+string applicationInsightsInstrumentationKey = builder.Configuration["NotesService:ApplicationInsights:ConnectionString"] ?? throw new ConfigurationKeyNotFoundException("NotesService:ApplicationInsights:ConnectionString");
+builder.Services.AddApplicationInsightsTelemetry(x => x.ConnectionString = applicationInsightsInstrumentationKey);
 builder.Services.AddSingleton<ITelemetryInitializer, ApplicationInsightsTelemetryInitializer>();
 
 // Swagger
