@@ -1,10 +1,34 @@
-Note
+<nz-page-header>
+    <nz-page-header-title>Note</nz-page-header-title>
+    <nz-page-header-subtitle *ngIf="note">note.id</nz-page-header-subtitle>
+    <nz-page-header-extra>
+        <nz-space>
+            <button *nzSpaceItem type="button" nz-button nzType="primary" (click)="save()" [nzLoading]="saving">
+                <span nz-icon nzType="save"></span>
+                <ng-container *ngIf="saving">Saving note...</ng-container>
+                <ng-container *ngIf="!saving">Save note</ng-container>
+            </button>
+            <button *nzSpaceItem type="button" nz-button nzDanger [nzLoading]="deleting"
+                nz-popconfirm nzPopconfirmTitle="Are you sure?" nzPopconfirmPlacement="left" nzOkText="Delete" [nzOkDanger]="true" (nzOnConfirm)="delete()">
+                <span nz-icon nzType="delete"></span>
+                <ng-container *ngIf="deleting">Deleting note...</ng-container>
+                <ng-container *ngIf="!deleting">Delete note</ng-container>
+            </button>
+        </nz-space>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+        <nz-descriptions>
+            <nz-descriptions-item nzTitle="Created" *ngIf="note">
+                {{ note.createdAt }}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Updated" *ngIf="note">
+                {{ note.updatedAt }}
+            </nz-descriptions-item>
+        </nz-descriptions>
+    </nz-page-header-content>
+</nz-page-header>
 
-<ng-container *ngIf="(note$ | async) as note">
-    Id: {{ note.id }} <br />
-    CreatedAt: {{ note.createdAt }} <br />
-    UpdatedAt: {{ note.updatedAt }} <br />
-    Content: {{ note.content}}
+<ng-container *ngIf="loading">Loading...</ng-container>
+<ng-container *ngIf="note">
+    <app-editor [(ngModel)]="note.content"></app-editor>
 </ng-container>
-<!-- <app-editor>
-</app-editor> -->

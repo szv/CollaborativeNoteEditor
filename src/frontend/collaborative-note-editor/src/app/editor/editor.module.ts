@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 import { EditorComponent } from './components/editor.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import { EditorComponent } from './components/editor.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     NzInputModule,
   ],
   exports: [

@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using NotesService.Data.DbContexts;
 using NotesService.Shared.Exceptions;
 using NotesService.Shared.Models;

@@ -39,6 +39,7 @@ builder.Services.AddDbContext<NotesDbContext>(options =>
     string connectionString = builder.Configuration["NotesService:Cosmos:ConnectionString"] ?? throw new ConfigurationKeyNotFoundException("NotesService:Cosmos:ConnectionString");
     string databaseName = builder.Configuration["NotesService:Cosmos:DatabaseName"] ?? throw new ConfigurationKeyNotFoundException("NotesService:Cosmos:DatabaseName");
     options.UseCosmos(connectionString, databaseName);
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
 });
 
 builder.Services.AddCors(options =>
