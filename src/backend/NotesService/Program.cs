@@ -1,5 +1,6 @@
 using Azure.Identity;
 using Mapster;
+using MapsterMapper;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
@@ -42,10 +43,14 @@ builder.Services.AddDbContext<NotesDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
 });
 
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
+
+// Mapster
+builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 // Application Services
 builder.Services.AddScoped<NotesService.Services.NotesService>();
