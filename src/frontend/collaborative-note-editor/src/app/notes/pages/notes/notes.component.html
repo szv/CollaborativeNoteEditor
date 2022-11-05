@@ -1,5 +1,4 @@
-<nz-list [nzLoading]="loading">
-    <nz-list-empty nzNoResult="No notes"></nz-list-empty>
+<nz-list [nzLoading]="loading" [nzDataSource]="notes">
     <nz-list-item *ngFor="let note of notes">
         <nz-list-item-meta
             nzDescription="Sebastian Szvetecz • {{ note.createdAt | date:'short' }}"

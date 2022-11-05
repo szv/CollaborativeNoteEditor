@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { NoteResponseDto, NotesServiceService, UpdateNoteRequestDto } from 'src/libs/api-client';
 
@@ -16,10 +16,12 @@ export class NoteComponent implements OnInit {
   public loading: boolean = false;
   public saving: boolean = false;
   public deleting: boolean = false;
+  public savedTooltipVisible: boolean = false;
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _notesService: NotesServiceService
+    private readonly _notesService: NotesServiceService,
+    private readonly _router: Router
   ) { }
 
   ngOnInit(): void {
@@ -27,6 +29,10 @@ export class NoteComponent implements OnInit {
       this.id = params.get('id');
       this.load();
     });
+  }
+
+  public back(): void {
+    this._router.navigateByUrl("/notes");
   }
 
   private async load(): Promise<void> {
@@ -41,12 +47,19 @@ export class NoteComponent implements OnInit {
       content: this.note?.content
     };
     await firstValueFrom(this._notesService.notesIdPut(this.id!, updateData))
+      .then(() => this.showSavedTooltip())
       .finally(() => this.saving = false);
   }
 
   public async delete(): Promise<void> {
     this.deleting = true;
     await firstValueFrom(this._notesService.notesIdDelete(this.id!))
+      .then(() => this.back())
       .finally(() => this.deleting = false);
+  }
+
+  private showSavedTooltip(): void {
+    this.savedTooltipVisible = true;
+    setTimeout(() => this.savedTooltipVisible = false, 3000);
   }
 }

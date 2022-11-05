@@ -73,14 +73,16 @@ app.MapGet("/notes/{id}", (Guid id, NotesService.Services.NotesService notesServ
     return notesService.GetOrThrowAsync<NoteResponseDto>(id);
 });
 
-app.MapPost("/notes", (NotesService.Services.NotesService notesService, CreateNoteRequestDto dto) =>
+app.MapPost("/notes", async (NotesService.Services.NotesService notesService, CreateNoteRequestDto dto) =>
 {
-    return notesService.CreateAsync(dto.Adapt<Note>());
+    Note note = await notesService.CreateAsync(dto.Adapt<Note>());
+    return note.Adapt<NoteOverviewResponseDto>();
 });
 
-app.MapPut("/notes/{id}", (Guid id, NotesService.Services.NotesService notesService, UpdateNoteRequestDto dto) =>
+app.MapPut("/notes/{id}", async (Guid id, NotesService.Services.NotesService notesService, UpdateNoteRequestDto dto) =>
 {
-    return notesService.CreateOrUpdateAsync(id, dto.Adapt<Note>());
+    Note note = await notesService.CreateOrUpdateAsync(id, dto.Adapt<Note>());
+    return note.Adapt<NoteOverviewResponseDto>();
 });
 
 app.MapDelete("/notes/{id}", (Guid id, NotesService.Services.NotesService notesService) =>

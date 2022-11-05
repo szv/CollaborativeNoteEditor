@@ -12,6 +12,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { EditorModule } from '../editor/editor.module';
 import { FormsModule } from '@angular/forms';
 
@@ -32,6 +33,7 @@ import { FormsModule } from '@angular/forms';
     NzPageHeaderModule,
     NzDescriptionsModule,
     NzSpaceModule,
+    NzToolTipModule,
   ]
 })
 export class NotesModule { }

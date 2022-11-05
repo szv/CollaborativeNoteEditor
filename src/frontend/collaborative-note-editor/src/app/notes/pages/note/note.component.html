@@ -1,9 +1,14 @@
 <nz-page-header>
-    <nz-page-header-title>Note</nz-page-header-title>
-    <nz-page-header-subtitle *ngIf="note">note.id</nz-page-header-subtitle>
+    <nz-page-header-title>Note-Editor</nz-page-header-title>
+    <nz-page-header-subtitle *ngIf="note">{{ note.id }}</nz-page-header-subtitle>
     <nz-page-header-extra>
         <nz-space>
-            <button *nzSpaceItem type="button" nz-button nzType="primary" (click)="save()" [nzLoading]="saving">
+            <button *nzSpaceItem type="button" nz-button nzType="primary" (click)="save()" [nzLoading]="saving"
+                nz-tooltip [nzTooltipTitle]="savedTooltipTemplate" nzTooltipPlacement="top" nzTooltipColor="blue" [nzTooltipTrigger]="null" [nzTooltipVisible]="savedTooltipVisible">
+                <ng-template #savedTooltipTemplate>
+                    Note saved sucessfully
+                    <span nz-icon nzType="check-circle"></span>
+                </ng-template>
                 <span nz-icon nzType="save"></span>
                 <ng-container *ngIf="saving">Saving note...</ng-container>
                 <ng-container *ngIf="!saving">Save note</ng-container>
@@ -19,10 +24,10 @@
     <nz-page-header-content>
         <nz-descriptions>
             <nz-descriptions-item nzTitle="Created" *ngIf="note">
-                {{ note.createdAt }}
+                {{ note.createdAt | date:'short' }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Updated" *ngIf="note">
-                {{ note.updatedAt }}
+                {{ note.updatedAt | date:'short' }}
             </nz-descriptions-item>
         </nz-descriptions>
     </nz-page-header-content>
@@ -30,5 +35,5 @@
 
 <ng-container *ngIf="loading">Loading...</ng-container>
 <ng-container *ngIf="note">
-    <app-editor [(ngModel)]="note.content"></app-editor>
+    <app-editor [(ngModel)]="note.content" #editor></app-editor>
 </ng-container>
