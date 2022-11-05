@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using NotesService.Data.DbContexts;
 using NotesService.Shared.Exceptions;
 using NotesService.Shared.Models;
@@ -55,15 +56,16 @@ internal class NotesService
         return note.Adapt<TAdaptTo>();
     }
 
-    public Task CreateAsync(Note note)
+    public async Task<Note> CreateAsync(Note note)
     {
         note.CreatedAt = DateTime.UtcNow;
         note.UpdatedAt = DateTime.UtcNow;
         _dbContext.Notes.Add(note);
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
+        return note;
     }
 
-    public async Task CreateOrUpdateAsync(Guid id, Note note)
+    public async Task<Note> CreateOrUpdateAsync(Guid id, Note note)
     {
         Note? existing = await GetAsync(id);
 
@@ -77,6 +79,7 @@ internal class NotesService
             await CreateAsync(note);
 
         await _dbContext.SaveChangesAsync();
+        return note;
     }
 
     public async Task DeleteAsync(Guid id)

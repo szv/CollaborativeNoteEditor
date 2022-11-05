@@ -39,6 +39,7 @@ builder.Services.AddDbContext<NotesDbContext>(options =>
     string connectionString = builder.Configuration["NotesService:Cosmos:ConnectionString"] ?? throw new ConfigurationKeyNotFoundException("NotesService:Cosmos:ConnectionString");
     string databaseName = builder.Configuration["NotesService:Cosmos:DatabaseName"] ?? throw new ConfigurationKeyNotFoundException("NotesService:Cosmos:DatabaseName");
     options.UseCosmos(connectionString, databaseName);
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
 });
 
 builder.Services.AddCors(options =>
@@ -72,14 +73,16 @@ app.MapGet("/notes/{id}", (Guid id, NotesService.Services.NotesService notesServ
     return notesService.GetOrThrowAsync<NoteResponseDto>(id);
 });
 
-app.MapPost("/notes", (NotesService.Services.NotesService notesService, CreateNoteRequestDto dto) =>
+app.MapPost("/notes", async (NotesService.Services.NotesService notesService, CreateNoteRequestDto dto) =>
 {
-    return notesService.CreateAsync(dto.Adapt<Note>());
+    Note note = await notesService.CreateAsync(dto.Adapt<Note>());
+    return note.Adapt<NoteOverviewResponseDto>();
 });
 
-app.MapPut("/notes/{id}", (Guid id, NotesService.Services.NotesService notesService, UpdateNoteRequestDto dto) =>
+app.MapPut("/notes/{id}", async (Guid id, NotesService.Services.NotesService notesService, UpdateNoteRequestDto dto) =>
 {
-    return notesService.CreateOrUpdateAsync(id, dto.Adapt<Note>());
+    Note note = await notesService.CreateOrUpdateAsync(id, dto.Adapt<Note>());
+    return note.Adapt<NoteOverviewResponseDto>();
 });
 
 app.MapDelete("/notes/{id}", (Guid id, NotesService.Services.NotesService notesService) =>

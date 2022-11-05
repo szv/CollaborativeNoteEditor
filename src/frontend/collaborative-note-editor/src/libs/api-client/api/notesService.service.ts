@@ -30,7 +30,6 @@ import { UpdateNoteRequestDto } from '../model/updateNoteRequestDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-import { environment } from 'src/environments/environment';
 
 
 
@@ -39,7 +38,7 @@ import { environment } from 'src/environments/environment';
 })
 export class NotesServiceService {
 
-    protected basePath = environment.basePath;
+    protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;
@@ -270,10 +269,10 @@ export class NotesServiceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<NoteOverviewResponseDto>;
+    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<NoteOverviewResponseDto>>;
+    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<NoteOverviewResponseDto>>;
+    public notesIdPut(id: string, updateNoteRequestDto: UpdateNoteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling notesIdPut.');
         }
@@ -287,6 +286,7 @@ export class NotesServiceService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -321,7 +321,7 @@ export class NotesServiceService {
         }
 
         let localVarPath = `/notes/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<NoteOverviewResponseDto>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: updateNoteRequestDto,
@@ -339,10 +339,10 @@ export class NotesServiceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<NoteOverviewResponseDto>;
+    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<NoteOverviewResponseDto>>;
+    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<NoteOverviewResponseDto>>;
+    public notesPost(createNoteRequestDto: CreateNoteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (createNoteRequestDto === null || createNoteRequestDto === undefined) {
             throw new Error('Required parameter createNoteRequestDto was null or undefined when calling notesPost.');
         }
@@ -353,6 +353,7 @@ export class NotesServiceService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -387,7 +388,7 @@ export class NotesServiceService {
         }
 
         let localVarPath = `/notes`;
-        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<NoteOverviewResponseDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createNoteRequestDto,
