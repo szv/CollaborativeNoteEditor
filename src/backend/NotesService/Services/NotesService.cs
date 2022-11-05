@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using NotesService.Data.DbContexts;
 using NotesService.Shared.Exceptions;
 using NotesService.Shared.Models;
-using System.Collections.Generic;
 
 namespace NotesService.Services;
 
@@ -67,18 +66,17 @@ internal class NotesService
 
     public async Task<Note> CreateOrUpdateAsync(Guid id, Note note)
     {
-        Note? existing = await GetAsync(id);
+        Note? existing = await _dbContext.Notes.AsTracking().Where(x => x.Id == id).FirstOrDefaultAsync();
 
         if (existing is not null)
         {
-            note.Id = id;
-            note.UpdatedAt = DateTime.Now;
-            _dbContext.Notes.Update(note);
+            existing.Content = note.Content;
+            existing.UpdatedAt = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
         }
         else
             await CreateAsync(note);
 
-        await _dbContext.SaveChangesAsync();
         return note;
     }
 
