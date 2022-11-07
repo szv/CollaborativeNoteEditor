@@ -50,6 +50,7 @@ builder.Services.AddCors(options =>
 });
 
 // Mapster
+builder.Services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 // Application Services

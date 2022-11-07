@@ -14,7 +14,10 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { EditorModule } from '../editor/editor.module';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,7 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     NotesRoutingModule,
     IconsProviderModule,
     EditorModule,
@@ -34,6 +37,9 @@ import { FormsModule } from '@angular/forms';
     NzDescriptionsModule,
     NzSpaceModule,
     NzToolTipModule,
+    NzInputModule,
+    NzSpinModule,
+    NzFormModule,
   ]
 })
 export class NotesModule { }
