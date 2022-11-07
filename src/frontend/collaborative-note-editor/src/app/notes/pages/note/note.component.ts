@@ -44,7 +44,9 @@ export class NoteComponent implements OnInit {
   public async save(): Promise<void> {
     this.saving = true;
     const updateData: UpdateNoteRequestDto = {
-      content: this.note?.content
+      title: this.note?.title,
+      content: this.note?.content,
+      username: this.note?.username
     };
     await firstValueFrom(this._notesService.notesIdPut(this.id!, updateData))
       .then(() => this.showSavedTooltip())

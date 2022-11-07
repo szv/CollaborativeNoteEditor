@@ -59,6 +59,7 @@ internal class NotesService
     {
         note.CreatedAt = DateTime.UtcNow;
         note.UpdatedAt = DateTime.UtcNow;
+        note.Username = note.Username?.Length == 0 ? null : note.Username;
         _dbContext.Notes.Add(note);
         await _dbContext.SaveChangesAsync();
         return note;
@@ -72,7 +73,7 @@ internal class NotesService
         {
             existing.Title = note.Title;
             existing.Content = note.Content;
-            existing.Username = note.Username;
+            existing.Username = note.Username?.Length == 0 ? null : note.Username;
             existing.UpdatedAt = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
         }
