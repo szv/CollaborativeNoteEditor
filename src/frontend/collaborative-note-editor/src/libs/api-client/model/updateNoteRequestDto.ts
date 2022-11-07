@@ -12,6 +12,8 @@
 
 
 export interface UpdateNoteRequestDto { 
+    title?: string | null;
     content?: string | null;
+    username?: string | null;
 }
 

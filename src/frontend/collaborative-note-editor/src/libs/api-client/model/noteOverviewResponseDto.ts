@@ -13,6 +13,8 @@
 
 export interface NoteOverviewResponseDto { 
     id?: string;
+    title?: string | null;
+    username?: string | null;
     createdAt?: string;
     updatedAt?: string;
 }

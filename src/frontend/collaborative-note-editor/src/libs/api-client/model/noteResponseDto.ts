@@ -13,7 +13,9 @@
 
 export interface NoteResponseDto { 
     id?: string;
+    title?: string | null;
     content?: string | null;
+    username?: string | null;
     createdAt?: string;
     updatedAt?: string;
 }
