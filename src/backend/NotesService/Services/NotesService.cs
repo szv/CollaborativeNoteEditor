@@ -70,7 +70,9 @@ internal class NotesService
 
         if (existing is not null)
         {
+            existing.Title = note.Title;
             existing.Content = note.Content;
+            existing.Username = note.Username;
             existing.UpdatedAt = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
         }
