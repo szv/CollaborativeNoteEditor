@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { CreateNoteRequestDto, NoteOverviewResponseDto, NoteResponseDto, NotesServiceService } from 'src/libs/api-client';
+import { CreateNoteRequestDto, NotesServiceService } from 'src/libs/api-client';
 
 @Component({
   selector: 'app-root',

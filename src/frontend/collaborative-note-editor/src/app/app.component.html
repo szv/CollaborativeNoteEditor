@@ -10,9 +10,10 @@
         <h1>Collaborative Note Editor</h1>
     </div>
     <ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-menu-item [nzSelected]="false" (click)="newNote()">
+      <li nz-menu-item [nzSelected]="false" (click)="newNote()" [nzDisabled]="creatingNote">
         <span nz-icon nzType="edit"></span>
         <span>New Note</span>
+        <nz-spin nzSimple [nzSpinning]="creatingNote"></nz-spin>
       </li>
       <li nz-menu-item nzMatchRouter routerLink="/notes">
         <span nz-icon nzType="dashboard"></span>
