@@ -37,7 +37,7 @@ jobs:
           push: true
           tags: collaborativenoteeditor.azurecr.io/collaboration-service:${{ github.sha }}
           file: src/backend/CollaborativeNoteEditor.CollaborationService/Dockerfile
-          context: src/backend/CollaborativeNoteEditor.CollaborationService/
+          context: src/backend/
 
 
   deploy:
