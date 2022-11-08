@@ -36,6 +36,7 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
   public set value(v: string | null) {
     this._value = v;
     this.onChange!(v);
+    console.debug(v);
   }
 
   ngOnInit(): void {
