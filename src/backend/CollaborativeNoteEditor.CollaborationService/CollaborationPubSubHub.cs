@@ -14,7 +14,7 @@ namespace CollaborationService
 
         public override ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
         {
-            request.ConnectionContext.
+            throw new NotImplementedException();
         }
     }
 }
