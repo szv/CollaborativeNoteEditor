@@ -7,7 +7,9 @@ on:
     branches: 
       [ main ]
     paths:
-    - 'src/backend/NotesService/**'
+    - 'src/backend/CollaborativeNoteEditor.NotesService/**'
+    - 'src/backend/CollaborativeNoteEditor.Data/**'
+    - 'src/backend/CollaborativeNoteEditor.Shared/**'
     - '.github/workflows/notes-service-AutoDeployTrigger-be04261f-c2e0-4b13-8a4c-e9bb3da1d08c.yml'
 
   # Allow mannually trigger 
@@ -36,7 +38,7 @@ jobs:
         with:
           push: true
           tags: collaborativenoteeditor.azurecr.io/notes-service:${{ github.sha }}
-          file: src/backend/NotesService/Dockerfile
+          file: src/backend/CollaborativeNoteEditor.NotesService/Dockerfile
           context: src/backend/
 
 
