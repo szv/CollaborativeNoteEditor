@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33015.44
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotesService", "NotesService\NotesService.csproj", "{2A03ADAA-FFB8-45DF-AACF-2DB58E1EEB55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotesService", "CollaborativeNoteEditor.NotesService\CollaborativeNoteEditor.NotesService.csproj", "{2A03ADAA-FFB8-45DF-AACF-2DB58E1EEB55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesService.Data", "NotesService.Data\NotesService.Data.csproj", "{96BB8550-3612-4124-BC1E-0C55C648BD86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesService.Data", "CollaborativeNoteEditor.Data\CollaborativeNoteEditor.Data.csproj", "{96BB8550-3612-4124-BC1E-0C55C648BD86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesService.Shared", "NotesService.Shared\NotesService.Shared.csproj", "{773EC442-075D-40F5-BE47-0FD8AABE0509}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesService.Shared", "CollaborativeNoteEditor.Shared\CollaborativeNoteEditor.Shared.csproj", "{773EC442-075D-40F5-BE47-0FD8AABE0509}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

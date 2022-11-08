@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NotesService.Data\NotesService.Data.csproj" />
+    <ProjectReference Include="..\CollaborativeNoteEditor.Data\CollaborativeNoteEditor.Data.csproj" />
   </ItemGroup>
 
 </Project>
