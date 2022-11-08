@@ -44,8 +44,10 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
     this._value = v;
 
     // Prevents firing onChange-event, after initializing Milkdown-Editor-content
-    if (this._firstRun)
+    if (this._firstRun) {
+      this._firstRun = false;
       this.onChange!(v);
+    }
   }
 
   public get collaboratorCount(): number {
