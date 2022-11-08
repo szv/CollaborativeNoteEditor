@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33015.44
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollaborationService", "CollaborationService\CollaborationService.csproj", "{088C9FC8-BB97-4872-B7A9-0FF9723654FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollaborationService", "CollaborativeNoteEditor.CollaborationService\CollaborativeNoteEditor.CollaborationService.csproj", "{088C9FC8-BB97-4872-B7A9-0FF9723654FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
