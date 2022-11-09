@@ -1,36 +1,9 @@
 <nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar"
-            nzCollapsible
-            nzWidth="256px"
-            nzBreakpoint="md"
-            nzTheme="light"
-            [(nzCollapsed)]="isCollapsed"
-            [nzTrigger]="null">
-    <div class="sidebar-logo">
-        <h1>Collaborative Note Editor</h1>
-    </div>
-    <ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-menu-item [nzSelected]="false" (click)="newNote()" [nzDisabled]="creatingNote">
-        <span nz-icon nzType="edit"></span>
-        <span>New Note</span>
-        <nz-spin nzSimple [nzSpinning]="creatingNote"></nz-spin>
-      </li>
-      <li nz-menu-item nzMatchRouter routerLink="/notes">
-        <span nz-icon nzType="dashboard"></span>
-        <span>Notes</span>
-      </li>
-    </ul>
-  </nz-sider>
   <nz-layout>
     <nz-header>
-      <div class="app-header">
-        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-            <span class="trigger"
-               nz-icon
-               [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-            ></span>
-        </span>
-      </div>
+      <a routerLink="/">
+        <h1>Collaborative Note Editor</h1>
+      </a>
     </nz-header>
     <nz-content>
       <div class="inner-content">
