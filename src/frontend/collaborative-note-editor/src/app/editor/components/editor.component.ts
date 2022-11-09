@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as Y from 'yjs';
 import { defaultValueCtx, Editor, rootCtx } from '@milkdown/core';
@@ -9,10 +9,8 @@ import { gfm } from '@milkdown/preset-gfm';
 import { getNord } from '@milkdown/theme-nord';
 import { menu } from '@milkdown/plugin-menu';
 import { collaborative, collabServiceCtx } from '@milkdown/plugin-collaborative';
-import { WebsocketProvider } from 'y-websocket';
 import { WebrtcProvider } from 'y-webrtc'
 import { ControlValueAccessor } from '@ngneat/reactive-forms';
-import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-editor',
@@ -22,12 +20,14 @@ import { ThisReceiver } from '@angular/compiler';
     { provide: NG_VALUE_ACCESSOR, useExisting: EditorComponent, multi: true }
   ]
 })
-export class EditorComponent extends ControlValueAccessor<string> implements OnInit {
+export class EditorComponent extends ControlValueAccessor<string> implements OnInit, OnDestroy {
   
-  private _firstRun: boolean = false;
+  private _firstRun: boolean = true;
   private _value: string | null = null;
   private _setEditorValue?: (value: any) => void;
   private _yJsDoc?: Y.Doc;
+  private _requestedSettingEditorValue: boolean = false;
+  private _destroyConnectionProvider?: () => void;
 
   @ViewChild('editorRef') public editorRef!: ElementRef;
 
@@ -35,6 +35,15 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
 
   constructor() {
     super();
+
+    // A hack to prevent overriding peer-data with db-loaded data
+    const interval = setInterval(() => {
+      if (!this._requestedSettingEditorValue || !this._setEditorValue)
+        return;
+
+      this._setEditorValue(this.value);
+      clearInterval(interval);
+    }, 50);
   }
 
   public get value(): string | null {
@@ -42,19 +51,18 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
   }
   public set value(v: string | null) {
     this._value = v;
-
-    // Prevents firing onChange-event, after initializing Milkdown-Editor-content
-    if (this._firstRun) {
-      this._firstRun = false;
-      this.onChange!(v);
-    }
+    this.onChange!(v);
   }
 
   public get collaboratorCount(): number {
-    return this._yJsDoc?.store.clients.size ?? 0;
+    return this._yJsDoc?.store.clients.size ?? -1;
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this._destroyConnectionProvider?.();
   }
 
   async ngAfterViewInit() {
@@ -64,8 +72,11 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
   writeValue(value: string): void {
     this.value = value;
 
-    if (this.collaboratorCount < 2)
+    if (this.collaboratorCount !== -1 && this.collaboratorCount < 2) {
       setTimeout(() => this._setEditorValue?.(value), 0);
+    } else if (this.collaboratorCount === -1) {
+      this._requestedSettingEditorValue = true;
+    }
   }
 
   private async initEditor(): Promise<void> {
@@ -97,7 +108,8 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
     this._yJsDoc = new Y.Doc();
     // const connectionProvider = new WebsocketProvider('<YOUR_WS_HOST>', 'milkdown', this._yJsDoc);
     const connectionProvider = new WebrtcProvider(this.collaborationRoomName, this._yJsDoc!); // eventually set password here
-    
+    this._destroyConnectionProvider = connectionProvider.destroy;
+
     editor.action((ctx) => {
         const collabService = ctx.get(collabServiceCtx);
 
