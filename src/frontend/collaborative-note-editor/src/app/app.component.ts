@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CreateNoteRequestDto, NotesServiceService } from 'src/libs/api-client';
 
@@ -15,7 +15,17 @@ export class AppComponent {
   constructor(
     private readonly _notesService: NotesServiceService,
     private readonly _router: Router,
+    private readonly _activatedRoute: ActivatedRoute,
   ) {
+  }
+
+  public get backVisible(): boolean {
+    console.debug(this._activatedRoute.snapshot);
+    return true;
+  }
+
+  public back(): void {
+    this._router.navigate(["notes"]);
   }
 
   public async newNote(): Promise<void> {

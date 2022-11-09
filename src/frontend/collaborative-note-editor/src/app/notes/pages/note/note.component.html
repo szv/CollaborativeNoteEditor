@@ -1,60 +1,62 @@
-<form nz-form [formGroup]="form" (ngSubmit)="save()">
-    <nz-page-header>
-        <nz-page-header-title>
-            <nz-form-item nz-tooltip nzTooltipTitle="Enter the title of this note">
-                <nz-form-control nzErrorTip="Please enter a title">
-                    <input nz-input placeholder="Enter a title *" formControlName="title" />
+<nz-spin [nzSpinning]="loading" nzSize="large" nzTip="Loading note...">
+    <form nz-form [formGroup]="form" (ngSubmit)="save()">
+        <nz-page-header (nzBack)="back()" nzBackIcon>
+            <nz-page-header-title>
+                <nz-form-item nz-tooltip nzTooltipTitle="Enter the title of this note">
+                    <nz-form-control nzErrorTip="Please enter a title">
+                        <input nz-input placeholder="Enter a title *" formControlName="title" />
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-page-header-title>
+            <nz-page-header-subtitle *ngIf="note">
+                <span>of</span>
+                <nz-form-item nz-tooltip nzTooltipTitle="Enter your username">
+                    <nz-form-control>
+                        <input nz-input placeholder="anonymous user" formControlName="username" />
+                    </nz-form-control>
+                </nz-form-item>
+            </nz-page-header-subtitle>
+            <nz-page-header-extra>
+                <nz-space>
+                    <button *nzSpaceItem type="submit" nz-button nzType="primary" [nzLoading]="saving"
+                        nz-tooltip [nzTooltipTitle]="savedTooltipTemplate" nzTooltipPlacement="top" nzTooltipColor="blue" [nzTooltipTrigger]="null" [nzTooltipVisible]="savedTooltipVisible">
+                        <ng-template #savedTooltipTemplate>
+                            Note saved sucessfully
+                            <span nz-icon nzType="check-circle"></span>
+                        </ng-template>
+                        <span nz-icon nzType="save"></span>
+                        <ng-container *ngIf="saving">Saving note...</ng-container>
+                        <ng-container *ngIf="!saving">Save note</ng-container>
+                    </button>
+                    <button *nzSpaceItem type="button" nz-button nzDanger [nzLoading]="deleting"
+                        nz-popconfirm nzPopconfirmTitle="Are you sure?" nzPopconfirmPlacement="left" nzOkText="Delete" [nzOkDanger]="true" (nzOnConfirm)="delete()">
+                        <span nz-icon nzType="delete"></span>
+                        <ng-container *ngIf="deleting">Deleting note...</ng-container>
+                        <ng-container *ngIf="!deleting">Delete note</ng-container>
+                    </button>
+                </nz-space>
+            </nz-page-header-extra>
+            <nz-page-header-content>
+                <nz-descriptions [nzColumn]="{ xxl: 5, xl: 4, lg: 3, md: 2, sm: 1, xs: 1 }">
+                    <nz-descriptions-item nzTitle="Created" *ngIf="note?.createdAt">
+                        {{ note?.createdAt | date:'short' }}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Updated" *ngIf="note?.updatedAt">
+                        {{ note?.updatedAt | date:'short' }}
+                    </nz-descriptions-item>
+                </nz-descriptions>
+            </nz-page-header-content>
+        </nz-page-header>
+    
+        <!-- <ng-container *ngIf="loading">
+            <nz-spin nzSimple nzSize="large"></nz-spin>
+        </ng-container> -->
+        <ng-container *ngIf="note">
+            <nz-form-item>
+                <nz-form-control nzErrorTip="Please enter some content">
+                    <app-editor formControlName="content" [collaborationRoomName]="note.id" #editor></app-editor>
                 </nz-form-control>
             </nz-form-item>
-        </nz-page-header-title>
-        <nz-page-header-subtitle *ngIf="note">
-            <span>of</span>
-            <nz-form-item nz-tooltip nzTooltipTitle="Enter your username">
-                <nz-form-control>
-                    <input nz-input placeholder="anonymous user" formControlName="username" />
-                </nz-form-control>
-            </nz-form-item>
-        </nz-page-header-subtitle>
-        <nz-page-header-extra>
-            <nz-space>
-                <button *nzSpaceItem type="submit" nz-button nzType="primary" [nzLoading]="saving"
-                    nz-tooltip [nzTooltipTitle]="savedTooltipTemplate" nzTooltipPlacement="top" nzTooltipColor="blue" [nzTooltipTrigger]="null" [nzTooltipVisible]="savedTooltipVisible">
-                    <ng-template #savedTooltipTemplate>
-                        Note saved sucessfully
-                        <span nz-icon nzType="check-circle"></span>
-                    </ng-template>
-                    <span nz-icon nzType="save"></span>
-                    <ng-container *ngIf="saving">Saving note...</ng-container>
-                    <ng-container *ngIf="!saving">Save note</ng-container>
-                </button>
-                <button *nzSpaceItem type="button" nz-button nzDanger [nzLoading]="deleting"
-                    nz-popconfirm nzPopconfirmTitle="Are you sure?" nzPopconfirmPlacement="left" nzOkText="Delete" [nzOkDanger]="true" (nzOnConfirm)="delete()">
-                    <span nz-icon nzType="delete"></span>
-                    <ng-container *ngIf="deleting">Deleting note...</ng-container>
-                    <ng-container *ngIf="!deleting">Delete note</ng-container>
-                </button>
-            </nz-space>
-        </nz-page-header-extra>
-        <nz-page-header-content>
-            <nz-descriptions [nzColumn]="{ xxl: 5, xl: 4, lg: 3, md: 2, sm: 1, xs: 1 }">
-                <nz-descriptions-item nzTitle="Created" *ngIf="note?.createdAt">
-                    {{ note?.createdAt | date:'short' }}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Updated" *ngIf="note?.updatedAt">
-                    {{ note?.updatedAt | date:'short' }}
-                </nz-descriptions-item>
-            </nz-descriptions>
-        </nz-page-header-content>
-    </nz-page-header>
-
-    <ng-container *ngIf="loading">
-        <nz-spin nzSimple nzSize="large"></nz-spin>
-    </ng-container>
-    <ng-container *ngIf="note">
-        <nz-form-item>
-            <nz-form-control nzErrorTip="Please enter some content">
-                <app-editor formControlName="content" [collaborationRoomName]="note.id" #editor></app-editor>
-            </nz-form-control>
-        </nz-form-item>
-    </ng-container>
-</form>
+        </ng-container>
+    </form>
+</nz-spin>
