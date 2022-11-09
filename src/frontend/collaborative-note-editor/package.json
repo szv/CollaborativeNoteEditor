@@ -28,6 +28,7 @@
     "@milkdown/prose": "^6.5.0",
     "@milkdown/theme-nord": "^6.5.0",
     "@ngneat/reactive-forms": "^5.0.1",
+    "base64-arraybuffer": "^1.0.2",
     "ng-zorro-antd": "^14.1.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

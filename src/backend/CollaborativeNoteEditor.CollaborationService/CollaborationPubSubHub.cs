@@ -1,20 +1,28 @@
-﻿using Microsoft.Azure.WebPubSub.AspNetCore;
+﻿using Azure.Core;
+using Microsoft.Azure.WebPubSub.AspNetCore;
 using Microsoft.Azure.WebPubSub.Common;
+using System.Text;
 
 namespace CollaborationService
 {
-    public class CollaborationPubSubHub : WebPubSubHub
+    public class CollaborativeNoteEditorHub : WebPubSubHub
     {
-        private readonly WebPubSubServiceClient<CollaborationPubSubHub> _serviceClient;
+        private readonly WebPubSubServiceClient<CollaborativeNoteEditorHub> _serviceClient;
 
-        public CollaborationPubSubHub(WebPubSubServiceClient<CollaborationPubSubHub> serviceClient)
+        public CollaborativeNoteEditorHub(WebPubSubServiceClient<CollaborativeNoteEditorHub> serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        public override ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
+        public override Task OnConnectedAsync(ConnectedEventRequest request)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
+        }
+
+        public override async ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
+        {
+            await _serviceClient.SendToAllAsync(RequestContent.Create(request.Data), ContentType.ApplicationOctetStream);
+            return new UserEventResponse();
         }
     }
 }

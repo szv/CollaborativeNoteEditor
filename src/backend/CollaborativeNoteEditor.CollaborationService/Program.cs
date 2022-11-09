@@ -20,12 +20,14 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
 builder.Services.AddWebPubSub(options =>
 {
     string endpoint = builder.Configuration["CollaborationService:WebPubSub:Endpoint"] ?? throw new ConfigurationKeyNotFoundException("CollaborationService:WebPubSub:Endpoint");
     options.ServiceEndpoint = new(new Uri(endpoint), azureCredential);
 })
-.AddWebPubSubServiceClient<CollaborationPubSubHub>();
+.AddWebPubSubServiceClient<CollaborativeNoteEditorHub>();
 
 var app = builder.Build();
 
@@ -36,11 +38,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/negotiate", async (WebPubSubServiceClient<CollaborationPubSubHub> serviceClient, HttpContext context) =>
+app.UseCors();
+
+app.MapGet("/negotiate/{roomName}", async (
+    Guid roomName,
+    WebPubSubServiceClient<CollaborativeNoteEditorHub> serviceClient,
+    HttpContext context
+) =>
 {
-    int testUserId = Random.Shared.Next(int.MaxValue);
-    await context.Response.WriteAsync(serviceClient.GetClientAccessUri(userId: testUserId.ToString()).AbsoluteUri);
+    if (roomName == default)
+        await Task.FromResult(Results.BadRequest("Invalid roomName"));
+
+    Uri uri = await serviceClient.GetClientAccessUriAsync(roles: new string[] { $"webpubsub.sendToGroup.{roomName}", $"webpubsub.joinLeaveGroup.{roomName}" });
+    await context.Response.WriteAsync(uri.AbsoluteUri);
 });
-app.MapWebPubSubHub<CollaborationPubSubHub>("/eventhandler/{*path}");
+app.MapWebPubSubHub<CollaborativeNoteEditorHub>("/eventhandler/{*path}");
 
 app.Run();

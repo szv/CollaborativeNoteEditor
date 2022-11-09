@@ -12,7 +12,9 @@ import { collaborative, collabServiceCtx } from '@milkdown/plugin-collaborative'
 import { WebsocketProvider } from 'y-websocket';
 import { WebrtcProvider } from 'y-webrtc'
 import { ControlValueAccessor } from '@ngneat/reactive-forms';
-import { ThisReceiver } from '@angular/compiler';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { encode as base64Encode, decode as base64Decode } from 'base64-arraybuffer';
 
 @Component({
   selector: 'app-editor',
@@ -33,7 +35,7 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
 
   @Input() public collaborationRoomName?: string;
 
-  constructor() {
+  constructor(private readonly _http: HttpClient) {
     super();
   }
 
@@ -84,19 +86,37 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
       .use(collaborative)
       .create();
 
-    this.initializeCollaboration(editor);
+    await this.initializeCollaboration(editor);
     this._setEditorValue = (value: any) => editor.action(replaceAll(value));
   }
 
-  private initializeCollaboration(editor: Editor): void {
+  private async initializeCollaboration(editor: Editor): Promise<void> {
     if (!this.collaborationRoomName) {
       console.warn("collaborationRommName not specified. Collaboration disabled.");
       return;
     }
 
     this._yJsDoc = new Y.Doc();
-    // const connectionProvider = new WebsocketProvider('<YOUR_WS_HOST>', 'milkdown', this._yJsDoc);
-    const connectionProvider = new WebrtcProvider(this.collaborationRoomName, this._yJsDoc!); // eventually set password here
+    const uuid = "a141d9f0-bcd3-4417-b8d9-8b9dea611770";
+    const result = await (await firstValueFrom(this._http.get(`http://localhost:5193/negotiate/${uuid}`, { responseType: "text" }))).split("?access_token=");
+    const host = result[0];
+    const accessToken = result[1];
+
+    const connectionProvider = new WebsocketProvider(host, "", this._yJsDoc, {
+      params: {
+        access_token: accessToken
+      },
+      WebSocketPolyfill: WebSocketAdapter //new WebSocket(host, "json.webpubsub.azure.v1") as any,
+    });
+    // const connectionProvider = new WebrtcProvider(this.collaborationRoomName, this._yJsDoc!); // eventually set password here
+    // connectionProvider.ws?.addEventListener("open", (ev) => {
+    //   connectionProvider.ws?.send(JSON.stringify({
+    //     test: true
+    //   }));
+    // });
+    // connectionProvider.ws?.addEventListener("message", (ev) => {
+    //   console.debug(ev);
+    // });
     
     editor.action((ctx) => {
         const collabService = ctx.get(collabServiceCtx);
@@ -108,8 +128,72 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
     });
 
     this._yJsDoc.on("update", (update, origin) => {
-      console.debug(update);
-      console.debug(origin);
+      // console.debug(update);
+      // console.debug(origin);
     });
+  }
+}
+
+class WebSocketAdapter extends WebSocket {
+
+  private _ackId: number = 0;
+
+  // override onmessage: ((this: WebSocket, ev: MessageEvent<any>) => any) | null = null;
+
+  override addEventListener(type: any, listener: any, options?: any): void {
+    let newListener = listener;
+
+    if (type === "message") {
+      newListener = function (ev: any) {
+        console.debug(ev);
+        return listener(ev);
+
+        // const decoded = base64Decode(ev.data);
+        // console.debug(decoded);
+
+        if (!ev.data.data)
+          return;
+
+        const decoded = base64Decode(ev.data.data);
+        console.debug(decoded);
+        return listener(decoded);
+      }
+    }
+
+    super.addEventListener(type as any, newListener as any, options as any);
+  }
+
+  constructor(url: string | URL, protocols?: string | string[] | undefined) {
+    super(url, protocols);
+    // super(url, "json.webpubsub.azure.v1");
+    // super.addEventListener("open", this.joinGroup);
+  }
+
+  public new(url: string | URL, protocols?: string | string[] | undefined): WebSocket {
+    // return new WebSocketAdapter(url, "json.webpubsub.azure.v1");
+    return new WebSocketAdapter(url, protocols);
+  }
+
+  override send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
+    console.debug(data);
+    super.send(data);
+    return;
+    
+    const json = JSON.stringify({
+      type: "sendToGroup",
+      group: "a141d9f0-bcd3-4417-b8d9-8b9dea611770",
+      dataType: "binary",
+      data: base64Encode(data as any)
+    });
+    // console.debug(json);
+    super.send(json);
+  }
+
+  private joinGroup(): void {
+    super.send(JSON.stringify({
+      type: "joinGroup",
+      group: "a141d9f0-bcd3-4417-b8d9-8b9dea611770",
+      ackId: ++this._ackId
+    }));
   }
 }
