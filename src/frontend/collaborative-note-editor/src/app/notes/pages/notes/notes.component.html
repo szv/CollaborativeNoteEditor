@@ -1,3 +1,11 @@
+<nz-page-header nzTitle="Notes">
+    <nz-page-header-extra>
+        <button nz-button nzType="primary" (click)="newNote()" [nzLoading]="creatingNote">
+            <span nz-icon nzType="plus-circle"></span>
+            Create new note
+        </button>
+    </nz-page-header-extra>
+</nz-page-header>
 <nz-list [nzLoading]="loading" [nzDataSource]="notes">
     <nz-list-item *ngFor="let note of notes">
         <nz-list-item-meta [nzTitle]="note.title ?? note.id">
@@ -8,16 +16,16 @@
         <ul nz-list-item-actions>
             <nz-list-item-action>
                 <nz-button-group>
-                    <button nz-button [routerLink]="['/notes', note.id]">
+                    <button nz-button [routerLink]="['/notes', note.id]" [disabled]="creatingNote">
                         <span nz-icon nzType="edit"></span>
                         Edit
                     </button>
                     <button nz-button nzDanger
-                        [nzLoading]="deletingId === note.id"
+                        [nzLoading]="isDeleting(note.id)"
                         nz-popconfirm nzPopconfirmTitle="Are you sure?" nzPopconfirmPlacement="left" nzOkText="Delete" [nzOkDanger]="true" (nzOnConfirm)="deleteNote(note)">
                         <span nz-icon nzType="delete"></span>
-                        <ng-container *ngIf="deletingId === note.id">Deleting...</ng-container>
-                        <ng-container *ngIf="deletingId !== note.id">Delete</ng-container>
+                        <ng-container *ngIf="isDeleting(note.id)">Deleting...</ng-container>
+                        <ng-container *ngIf="!isDeleting(note.id)">Delete</ng-container>
                     </button>
                 </nz-button-group>
             </nz-list-item-action>

@@ -30,7 +30,7 @@ export class NoteComponent implements OnInit {
     this.form = fb.group({
       title: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(200)]],
       username: [null, [Validators.maxLength(200)]],
-      content: [null, [Validators.required, Validators.minLength(1)]]
+      content: [null]
     });
   }
 

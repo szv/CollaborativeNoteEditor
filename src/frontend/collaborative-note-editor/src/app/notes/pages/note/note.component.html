@@ -48,9 +48,6 @@
             </nz-page-header-content>
         </nz-page-header>
     
-        <!-- <ng-container *ngIf="loading">
-            <nz-spin nzSimple nzSize="large"></nz-spin>
-        </ng-container> -->
         <ng-container *ngIf="note">
             <nz-form-item>
                 <nz-form-control nzErrorTip="Please enter some content">
@@ -60,3 +57,7 @@
         </ng-container>
     </form>
 </nz-spin>
+
+{{ form.get("content")?.valid }} <br />
+{{ form.get("content")?.dirty }} <br />
+{{ form.get("content")?.touched }} <br />
