@@ -106,10 +106,5 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
           .setAwareness(connectionProvider.awareness)
           .connect();
     });
-
-    this._yJsDoc.on("update", (update, origin) => {
-      console.debug(update);
-      console.debug(origin);
-    });
   }
 }
