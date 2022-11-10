@@ -1,7 +1,17 @@
 # CollaborativeNoteEditor
 An small cloud-computing exercise for my master studies.
 
+## General
+
 The goal is to implement a simple collaborative notes editor web app.
+
+The application should be able to do the following:
+- The app should be able to do the basic functions create, edit and delete notes.
+- A list of all notes should be displayed.
+- Enable real-time collaboration by using the framework Yjs.
+
+The application was developed as a single page application in Angular and has been deployed on Microsoft Azure.
+
 
 [https://salmon-dune-04b164f03.2.azurestaticapps.net/](https://salmon-dune-04b164f03.2.azurestaticapps.net/)
 
