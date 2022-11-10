@@ -1,9 +1,15 @@
 <nz-page-header nzTitle="Notes">
     <nz-page-header-extra>
-        <button nz-button nzType="primary" (click)="newNote()" [nzLoading]="creatingNote">
-            <span nz-icon nzType="plus-circle"></span>
-            Create new note
-        </button>
+        <nz-space>
+            <button *nzSpaceItem nz-button (click)="load()">
+                <span nz-icon nzType="reload"></span>
+                Reload
+            </button>
+            <button *nzSpaceItem nz-button nzType="primary" (click)="newNote()" [nzLoading]="creatingNote">
+                <span nz-icon nzType="plus-circle"></span>
+                Create new note
+            </button>
+        </nz-space>
     </nz-page-header-extra>
 </nz-page-header>
 <nz-list [nzLoading]="loading" [nzDataSource]="notes">

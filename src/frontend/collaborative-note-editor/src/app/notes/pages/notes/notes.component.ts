@@ -29,7 +29,7 @@ export class NotesComponent implements OnInit {
     return this.deletingIds.indexOf(noteId) !== -1;
   }
 
-  private async load(): Promise<void> {
+  public async load(): Promise<void> {
     this.loading = true;
     this.notes = await firstValueFrom(this._notesService.notesGet())
       .finally(() => this.loading = false);
