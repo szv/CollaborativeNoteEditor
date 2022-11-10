@@ -21,12 +21,10 @@ import { ControlValueAccessor } from '@ngneat/reactive-forms';
   ]
 })
 export class EditorComponent extends ControlValueAccessor<string> implements OnInit, OnDestroy {
-  
-  private _firstRun: boolean = true;
+
   private _value: string | null = null;
   private _setEditorValue?: (value: any) => void;
   private _yJsDoc?: Y.Doc;
-  private _requestedSettingEditorValue: boolean = false;
   private _destroyConnectionProvider?: () => void;
 
   @ViewChild('editorRef') public editorRef!: ElementRef;
@@ -35,15 +33,6 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
 
   constructor() {
     super();
-
-    // A hack to prevent overriding peer-data with db-loaded data
-    const interval = setInterval(() => {
-      if (!this._requestedSettingEditorValue || !this._setEditorValue)
-        return;
-
-      this._setEditorValue(this.value);
-      clearInterval(interval);
-    }, 50);
   }
 
   public get value(): string | null {
@@ -71,18 +60,14 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
 
   writeValue(value: string): void {
     this.value = value;
-
-    if (this.collaboratorCount !== -1 && this.collaboratorCount < 2) {
-      setTimeout(() => this._setEditorValue?.(value), 0);
-    } else if (this.collaboratorCount === -1) {
-      this._requestedSettingEditorValue = true;
-    }
+    this._setEditorValue?.(value);
   }
 
   private async initEditor(): Promise<void> {
     const editor = await Editor.make()
       .config((ctx) => {
           ctx.set(rootCtx, this.editorRef!.nativeElement);
+          ctx.set(defaultValueCtx, this.value ?? "");
           ctx.get(listenerCtx).markdownUpdated((ctx, markdown, prevMarkdown) => {
             this.value = markdown;
         });
@@ -100,23 +85,32 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
   }
 
   private initializeCollaboration(editor: Editor): void {
-    if (!this.collaborationRoomName) {
-      console.warn("collaborationRommName not specified. Collaboration disabled.");
-      return;
-    }
-
-    this._yJsDoc = new Y.Doc();
-    // const connectionProvider = new WebsocketProvider('<YOUR_WS_HOST>', 'milkdown', this._yJsDoc);
-    const connectionProvider = new WebrtcProvider(this.collaborationRoomName, this._yJsDoc!); // eventually set password here
-    this._destroyConnectionProvider = connectionProvider.destroy;
-
     editor.action((ctx) => {
-        const collabService = ctx.get(collabServiceCtx);
+      if (!this.collaborationRoomName) {
+        console.warn("collaborationRommName not specified. Collaboration disabled.");
+        return;
+      }
 
-        collabService
-          .bindDoc(this._yJsDoc!)
-          .setAwareness(connectionProvider.awareness)
+      this._yJsDoc = new Y.Doc();
+      const collaborationService = ctx.get(collabServiceCtx);
+      collaborationService.bindDoc(this._yJsDoc!);
+
+      // const connectionProvider = new WebsocketProvider('<YOUR_WS_HOST>', 'milkdown', this._yJsDoc);
+      const connectionProvider = new WebrtcProvider(this.collaborationRoomName!, this._yJsDoc!); // eventually set password here
+      this._destroyConnectionProvider = connectionProvider.destroy;
+      
+      collaborationService.setAwareness(connectionProvider.awareness);
+      connectionProvider.on("synced", async (isSynced: { synced: boolean }) => {
+        if (!isSynced || !isSynced?.synced) return;
+
+        collaborationService
+          .applyTemplate(this.value ?? "", (remoteNode, templateNode) => {
+            console.debug(remoteNode.content.size);
+            console.debug(templateNode.content.size);
+            return remoteNode.content.size === 0;
+          })
           .connect();
+      });
     });
   }
 }
