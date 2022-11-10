@@ -25,6 +25,7 @@
             "inlineStyleLanguage": "less",
             "assets": [
               "src/favicon.ico",
+              "src/staticwebapp.config.json",
               "src/assets",
               {
                 "glob": "**/*",
