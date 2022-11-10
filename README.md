@@ -1,4 +1,4 @@
-# CallaborativeNoteEditor
+# CollaborativeNoteEditor
 An small cloud-computing exercise for my master studies.
 
 The goal is to implement a simple collaborative notes editor web app.
