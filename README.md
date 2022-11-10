@@ -3,6 +3,10 @@ An small cloud-computing exercise for my master studies.
 
 The goal is to implement a simple collaborative notes editor web app.
 
+[https://salmon-dune-04b164f03.2.azurestaticapps.net/](https://salmon-dune-04b164f03.2.azurestaticapps.net/)
+
+> Note: It may take some time to load the notes, when the backend scaled to 0
+
 ## Azure
 
 Following Azure Service are used.
