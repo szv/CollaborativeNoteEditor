@@ -51,7 +51,7 @@
         <ng-container *ngIf="note">
             <nz-form-item>
                 <nz-form-control nzErrorTip="Please enter some content">
-                    <app-editor formControlName="content" [collaborationRoomName]="note.id" #editor></app-editor>
+                    <app-editor formControlName="content" [collaborationId]="note.id" #editor></app-editor>
                 </nz-form-control>
             </nz-form-item>
         </ng-container>
