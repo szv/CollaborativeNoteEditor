@@ -41,7 +41,7 @@ Following Azure Service are used.
 
 ## Deployment
 - GitHub Action for building and deploying the fronend to _Azure Static Web App_
-- GitHub Action for building the Docker container for the backend, uploading it to _Azure Container Registry_ and then instructing the _Azure Container App_ to pull the new _Docker Dontainer Image_ from th the Registry.
+- GitHub Action for building the Docker container for the backend, uploading it to _Azure Container Registry_ and then instructing the _Azure Container App_ to pull the new _Docker Container Image_ from th the Registry.
 
 ## Backend
 For the backend we developed a Service with ASP.NET (Core) 7 RC 2. The database access gets abstracted by using EFCore with the Cosmos-DB provdier. 
@@ -52,6 +52,6 @@ To document the implemented endpoints we used Swagger/OpenAPI. This endpoint-doc
 ## Frontend
 For the frontend we developed a _Single Page Application_ (SPA) with Angular 14.
 
-To fulfill the collaboration feature we used Y.JS in combination with the WebRTC connection provider. We decided using this connection provider, because it is simple to use and minimizes the workload for the backend.
+To fulfill the collaboration feature we used Y.JS in combination with the Websocket connection provider.
 
 ![Frontend Demo](./docs/images/frontend-demo.png)
