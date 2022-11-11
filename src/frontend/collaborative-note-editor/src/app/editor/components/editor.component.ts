@@ -11,6 +11,7 @@ import { menu } from '@milkdown/plugin-menu';
 import { collaborative, collabServiceCtx } from '@milkdown/plugin-collaborative';
 import { WebrtcProvider } from 'y-webrtc'
 import { ControlValueAccessor } from '@ngneat/reactive-forms';
+import { WebsocketProvider } from 'y-websocket';
 
 @Component({
   selector: 'app-editor',
@@ -25,14 +26,21 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
   private _value: string | null = null;
   private _setEditorValue?: (value: any) => void;
   private _yJsDoc?: Y.Doc;
-  private _destroyConnectionProvider?: () => void;
+  private _connectionProvider?: WebsocketProvider;
 
   @ViewChild('editorRef') public editorRef!: ElementRef;
 
-  @Input() public collaborationRoomName?: string;
+  @Input() public collaborationId?: string;
 
   constructor() {
     super();
+  }
+
+  private get collaborationRoomName(): string | undefined {
+    if (!this.collaborationId)
+      return undefined;
+
+    return `collaborative-note-editor-szv-${this.collaborationId}`;
   }
 
   public get value(): string | null {
@@ -51,7 +59,7 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
   }
 
   ngOnDestroy(): void {
-    this._destroyConnectionProvider?.();
+    this._connectionProvider?.destroy();
   }
 
   async ngAfterViewInit() {
@@ -95,13 +103,14 @@ export class EditorComponent extends ControlValueAccessor<string> implements OnI
       const collaborationService = ctx.get(collabServiceCtx);
       collaborationService.bindDoc(this._yJsDoc!);
 
-      // const connectionProvider = new WebsocketProvider('<YOUR_WS_HOST>', 'milkdown', this._yJsDoc);
-      const connectionProvider = new WebrtcProvider(this.collaborationRoomName!, this._yJsDoc!); // eventually set password here
-      this._destroyConnectionProvider = connectionProvider.destroy;
+      // const connectionProvider = new WebrtcProvider(this.collaborationRoomName!, this._yJsDoc); // eventually set password here
+      const connectionProvider = new WebsocketProvider("wss://demos.yjs.dev", this.collaborationRoomName, this._yJsDoc);
+      this._connectionProvider = connectionProvider;
       
       collaborationService.setAwareness(connectionProvider.awareness);
-      connectionProvider.on("synced", async (isSynced: { synced: boolean }) => {
-        if (!isSynced || !isSynced?.synced) return;
+      // connectionProvider.on("synced", async (isSynced: { synced: boolean }) => {  // webrtc
+      connectionProvider.on("sync", async (isSynced: boolean) => {   // websocket
+        if (!isSynced) return;
 
         collaborationService
           .applyTemplate(this.value ?? "", (remoteNode, templateNode) => {
