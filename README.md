@@ -1,3 +1,7 @@
+[![Azure Static Web Apps Deployment](https://github.com/szv/CollaborativeNoteEditor/actions/workflows/azure-static-web-apps-salmon-dune-04b164f03.yml/badge.svg)](https://github.com/szv/CollaborativeNoteEditor/actions/workflows/azure-static-web-apps-salmon-dune-04b164f03.yml)
+
+[![Azure Container App Notes-Service Deployment](https://github.com/szv/CollaborativeNoteEditor/actions/workflows/notes-service-AutoDeployTrigger-be04261f-c2e0-4b13-8a4c-e9bb3da1d08c.yml/badge.svg)](https://github.com/szv/CollaborativeNoteEditor/actions/workflows/notes-service-AutoDeployTrigger-be04261f-c2e0-4b13-8a4c-e9bb3da1d08c.yml)
+
 # CollaborativeNoteEditor
 An small cloud-computing exercise for my master studies.
 
